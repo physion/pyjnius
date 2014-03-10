@@ -59,7 +59,7 @@ elif platform == 'darwin':
         include_dirs = [join(java_home, 'include'), join(java_home, 'include', 'darwin')]
 elif platform == 'win32':
     jdk_home = environ.get('JDK_HOME')
-    jre_home = join(jdk_home,'jre') #environ.get('JRE_HOME')
+    jre_home = environ.get('JRE_HOME')
     include_dirs = [ join(jdk_home, 'include'), join(jdk_home, 'include', platform)]
     library_dirs = [ join(jdk_home, 'lib') ] #, join(jre_home, 'bin', 'server')]
     libraries = ['jvm'] 
