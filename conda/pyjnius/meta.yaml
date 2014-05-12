@@ -1,5 +1,5 @@
 package:
-  name: phyjnius
+  name: pyjnius
   version: 1.2.2
 
 source:
@@ -51,7 +51,7 @@ test:
 
 about:
   home: https://github.com/physion/pyjnius
-  license: GNU Lesser General Public License Version 3 (LGPLv3)
+  license: MIT
 
 # See
 # http://docs.continuum.io/conda/build.html for
