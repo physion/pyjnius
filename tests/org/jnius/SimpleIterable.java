@@ -7,5 +7,7 @@ public class SimpleIterable {
         List<String> result = new ArrayList<String>();
         result.add("hello");
         result.add("world");
+        
+        return result;
 	}
 }

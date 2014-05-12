@@ -21,7 +21,7 @@ class IterableConversion(unittest.TestCase):
         
         si = SimpleIterable()
         
-        expected = list("hello", "world")
+        expected = ["hello", "world"]
         actual = list(si.getIterable())
         
         self.assertEquals(expected, actual)
