@@ -138,7 +138,18 @@ def ensureclass(clsname):
     registers.append(clsname)
     autoclass(clsname)
 
+
+        
+def iterator_wrapper(java_iter_fn):
     
+    def fn(self):
+        iterator = java_iter_fn()
+        while iterator.hasNext():
+            yield iterator.next()
+            
+    return fn
+
+
 def autoclass(clsname):
     jniname = clsname.replace('.', '/')
     cls = MetaJavaClass.get_javaclass(jniname)
@@ -177,6 +188,9 @@ def autoclass(clsname):
                 get_signature(method.getReturnType()))
             cls = JavaStaticMethod if static else JavaMethod
             classDict[name] = cls(sig, varargs=varargs)
+            if name == 'iterator':
+                print("Adding __iter__support")
+                classDict['__iter__'] = iterator_wrapper(classDict[name])
             continue
 
         # multpile signatures
