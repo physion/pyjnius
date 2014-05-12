@@ -188,8 +188,7 @@ def autoclass(clsname):
                 get_signature(method.getReturnType()))
             cls = JavaStaticMethod if static else JavaMethod
             classDict[name] = cls(sig, varargs=varargs)
-            if name == 'iterator':
-                print("Adding __iter__support")
+            if name == 'iterator' and sig == '()Ljava/util/Iterator;':
                 classDict['__iter__'] = iterator_wrapper(classDict[name])
             continue
 
