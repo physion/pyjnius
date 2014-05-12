@@ -55,6 +55,7 @@ class Object(JavaClass):
 
     getClass = JavaMethod('()Ljava/lang/Class;')
     hashCode = JavaMethod('()I')
+    toString = JavaMethod('()Ljava/lang/String;')
 
 
 class Modifier(JavaClass):
@@ -137,7 +138,7 @@ def ensureclass(clsname):
     registers.append(clsname)
     autoclass(clsname)
 
-
+    
 def autoclass(clsname):
     jniname = clsname.replace('.', '/')
     cls = MetaJavaClass.get_javaclass(jniname)
