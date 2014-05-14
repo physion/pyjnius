@@ -1,6 +1,8 @@
 PyJNIus
 =======
 
+![](https://api.travis-ci.org/physion/pyjnius.svg?raw=true)
+
 A Python module to access Java classes as Python classes using JNI.
 
 PyJNIus is a "Work In Progress".
