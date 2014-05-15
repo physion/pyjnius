@@ -2,7 +2,7 @@ __all__ = ('autoclass', 'ensureclass')
 
 from jnius import (
     JavaClass, MetaJavaClass, JavaMethod, JavaStaticMethod,
-    JavaField, JavaStaticField, JavaMultipleMethod, find_javaclass
+    JavaField, JavaStaticField, JavaMultipleMethod, find_javaclass, cast
 )
 
 
@@ -145,7 +145,8 @@ def iterator_wrapper(java_iter_fn):
     def fn(self):
         iterator = java_iter_fn()
         while iterator.hasNext():
-            yield iterator.next()
+            jobj = iterator.next()
+            yield cast(jobj.__javaclass__, jobj)
             
     return fn
 
