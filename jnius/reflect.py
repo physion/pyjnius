@@ -146,7 +146,10 @@ def iterator_wrapper(java_iter_fn):
         iterator = java_iter_fn()
         while iterator.hasNext():
             jobj = iterator.next()
-            yield cast(jobj.__javaclass__, jobj)
+            if hasattr(jobj, '__javaclass__'):
+                yield cast(jobj.__javaclass__, jobj)
+            else:
+                yield jobj
             
     return fn
 
@@ -190,8 +193,8 @@ def autoclass(clsname):
             cls = JavaStaticMethod if static else JavaMethod
             method = cls(sig, varargs=varargs)
             classDict[name] = method
-            if name == 'toString' and sig=='()Ljava/lang/String;':
-                classDict['__str__'] = method
+            #if name == 'toString' and sig=='()Ljava/lang/String;':
+            #    classDict['__str__'] = method
             if name == 'iterator' and sig == '()Ljava/util/Iterator;':
                 classDict['__iter__'] = iterator_wrapper(classDict[name])
             continue
