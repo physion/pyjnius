@@ -51,7 +51,7 @@ cdef void populate_args(JNIEnv *j_env, tuple definition_args, jvalue *j_args, ar
         elif argtype[0] == 'L':
             if py_arg is None:
                 j_args[index].l = NULL
-            elif isinstance(py_arg, basestring) and \
+            elif isinstance(py_arg, string_types) and \
                     argtype in ('Ljava/lang/String;', 'Ljava/lang/Object;'):
                 j_args[index].l = j_env[0].NewStringUTF(
                     j_env, <char *><bytes>py_arg.encode('utf-8'))
