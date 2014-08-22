@@ -93,7 +93,11 @@ elif platform == 'linux2':
                 stdout=subprocess.PIPE).communicate()[0].strip()
     if not jre_home:
         raise Exception('Unable to determine JRE_HOME')
+<<<<<<< HEAD
     cpu = 'amd64' if architecture()[0] == '64bit' else 'i386'
+=======
+    cpu = 'i386' if sys.maxsize== 2147483647 else 'amd64'
+>>>>>>> e3fb51b06bde433d44593993142bebdf9c08e606
 
     if platform == 'win32':
         incl_dir = join(jdk_home, 'include', 'win32')
