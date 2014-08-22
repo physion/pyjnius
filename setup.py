@@ -64,7 +64,7 @@ elif platform == 'win32':
     include_dirs = [ join(jdk_home, 'include'), join(jdk_home, 'include', platform)]
     library_dirs = [ join(jdk_home, 'lib') ]
     libraries = ['jvm'] 
-elif platform == 'linux2':
+elif platform == 'linux2' or platform == 'linux':
     import subprocess
     # otherwise, we need to search the JDK_HOME
     jdk_home = environ.get('JDK_HOME')
