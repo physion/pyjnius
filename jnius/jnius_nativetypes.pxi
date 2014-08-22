@@ -1,4 +1,4 @@
-from future.builtins import range
+from six.moves import range
 
 cdef python_op(int op, object a, object b):
     if op == 0:

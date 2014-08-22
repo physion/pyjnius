@@ -1,4 +1,4 @@
-from future.builtins import map
+#from future.builtins import map
 from six import string_types
 
 cdef void release_args(JNIEnv *j_env, tuple definition_args, jvalue *j_args, args) except *:

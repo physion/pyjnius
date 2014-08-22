@@ -1,4 +1,4 @@
-from future.utils import iteritems
+from six import iteritems
 
 class JavaException(Exception):
     '''Can be a real java exception, or just an exception from the wrapper.

@@ -1,6 +1,5 @@
 import unittest
 from jnius.reflect import autoclass
-from future.builtins import int
 
 class BasicsTest(unittest.TestCase):
 
