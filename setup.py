@@ -20,7 +20,7 @@ libraries = []
 library_dirs = []
 extra_link_args = []
 include_dirs = []
-install_requires = []
+install_requires = ['six']
 
 # detect Python for android
 platform = sys.platform
@@ -52,7 +52,7 @@ elif platform == 'darwin':
         include_dirs = [join(framework, 'Versions/A/Headers')]
     except ImportError:
         import subprocess
-        java_home = subprocess.check_output('/usr/libexec/java_home').strip()
+        java_home = subprocess.check_output('/usr/libexec/java_home').strip().decode('utf-8')
         print(java_home)
         library_dirs = [join(java_home, 'jre', 'lib', 'server')]
         libraries = ['jvm']

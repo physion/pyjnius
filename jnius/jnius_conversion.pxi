@@ -1,5 +1,5 @@
 from future.builtins import map
-from past.builtins import basestring 
+from six import string_types
 
 cdef void release_args(JNIEnv *j_env, tuple definition_args, jvalue *j_args, args) except *:
     # do the conversion from a Python object to Java from a Java definition

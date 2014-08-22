@@ -1,4 +1,4 @@
-from past.builtins import basestring 
+from six import string_types
 
 cdef parse_definition(str definition):
     # not a function, just a field
@@ -138,7 +138,7 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
             continue
 
         if r == 'C':
-            if not isinstance(arg, basestring) or len(arg) != 1:
+            if not isinstance(arg, string_types) or len(arg) != 1:
                 return -1
             score += 10
             continue
@@ -172,7 +172,7 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
                 continue
 
             # if it's a string, accept any python string
-            if r == 'java/lang/String' and isinstance(arg, basestring):
+            if r == 'java/lang/String' and isinstance(arg, string_types):
                 score += 10
                 continue
 
@@ -182,7 +182,7 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
                 if isinstance(arg, JavaClass) or isinstance(arg, JavaObject):
                     score += 10
                     continue
-                elif isinstance(arg, basestring):
+                elif isinstance(arg, string_types):
                     score += 5
                     continue
                 return -1
@@ -219,7 +219,7 @@ cdef int calculate_score(sign_args, args, is_varargs=False) except *:
                 score += 10
                 continue
 
-            if (r == '[B' or r == '[C') and isinstance(arg, basestring):
+            if (r == '[B' or r == '[C') and isinstance(arg, string_types):
                 score += 10
                 continue
 

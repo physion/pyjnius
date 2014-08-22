@@ -17,7 +17,6 @@ compile-tests: build_ext
 	cd tests && javac org/jnius/SimpleIterable.java
 
 tests: compile-tests
-	cd tests && env PYTHONPATH=..:$(PYTHONPATH) nosetests-2.7 -v
 	cd tests && env PYTHONPATH=..:$(PYTHONPATH) nosetests -v
 
 clean:
