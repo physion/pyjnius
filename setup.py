@@ -69,7 +69,7 @@ elif platform == 'linux2' or platform == 'linux':
     # otherwise, we need to search the JDK_HOME
     jdk_home = environ.get('JDK_HOME')
     if not jdk_home:
-        dk_home = subprocess.Popen('readlink -f `which javac` | sed "s:bin/javac::"',
+        jdk_home = subprocess.Popen('readlink -f `which javac` | sed "s:bin/javac::"',
                     shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
     if not jdk_home or not exists(jdk_home):
         raise Exception('Unable to determine JDK_HOME')
