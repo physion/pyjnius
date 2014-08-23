@@ -61,8 +61,6 @@ cdef void create_jnienv():
     args.ignoreUnrecognized = JNI_FALSE
 
     retorno = JNI_CreateJavaVM(&jvm, <void **>&_platform_default_env, &args)
-    print("Creado")
-    print(retorno)
 
 cdef JNIEnv *get_platform_jnienv():
     if _platform_default_env == NULL:
