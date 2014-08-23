@@ -2,6 +2,7 @@ from setuptools import setup, Extension
 from os import environ
 from os.path import dirname, join, exists
 import sys
+from platform import architecture
 
 files = [
     'jni.pxi',
@@ -19,7 +20,7 @@ libraries = []
 library_dirs = []
 extra_link_args = []
 include_dirs = []
-install_requires = []
+install_requires = ['six']
 
 # detect Python for android
 platform = sys.platform
@@ -51,7 +52,7 @@ elif platform == 'darwin':
         include_dirs = [join(framework, 'Versions/A/Headers')]
     except ImportError:
         import subprocess
-        java_home = subprocess.check_output('/usr/libexec/java_home').strip()
+        java_home = subprocess.check_output('/usr/libexec/java_home').strip().decode('utf-8')
         print(java_home)
         library_dirs = [join(java_home, 'jre', 'lib', 'server')]
         libraries = ['jvm']
@@ -63,7 +64,7 @@ elif platform == 'win32':
     include_dirs = [ join(jdk_home, 'include'), join(jdk_home, 'include', platform)]
     library_dirs = [ join(jdk_home, 'lib') ]
     libraries = ['jvm'] 
-elif platform == 'linux2':
+elif platform == 'linux2' or platform == 'linux':
     import subprocess
     # otherwise, we need to search the JDK_HOME
     jdk_home = environ.get('JDK_HOME')
@@ -78,7 +79,8 @@ elif platform == 'linux2':
                     jdk_home = jdk_home[:-4]
         else:
             jdk_home = subprocess.Popen('readlink -f `which javac` | sed "s:bin/javac::"',
-                    shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
+                    shell=True, universal_newlines=True,
+                    stdout=subprocess.PIPE).communicate()[0].strip()
     if not jdk_home or not exists(jdk_home):
         raise Exception('Unable to determine JDK_HOME')
 
@@ -87,10 +89,11 @@ elif platform == 'linux2':
         jre_home = join(jdk_home, 'jre')
     if not jre_home:
         jre_home = subprocess.Popen('readlink -f `which java` | sed "s:bin/java::"',
-                shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
+                shell=True, universal_newlines=True,
+                stdout=subprocess.PIPE).communicate()[0].strip()
     if not jre_home:
         raise Exception('Unable to determine JRE_HOME')
-    cpu = 'i386' if sys.maxint == 2147483647 else 'amd64'
+    cpu = 'amd64' if architecture()[0] == '64bit' else 'i386'
 
     if platform == 'win32':
         incl_dir = join(jdk_home, 'include', 'win32')
