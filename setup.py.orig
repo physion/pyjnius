@@ -62,15 +62,30 @@ elif platform == 'win32':
     jdk_home = environ.get('JDK_HOME')
     jre_home = environ.get('JRE_HOME')
     include_dirs = [ join(jdk_home, 'include'), join(jdk_home, 'include', platform)]
-    library_dirs = [ join(jdk_home, 'lib'), join(jre_home, 'bin', 'server')]
+    library_dirs = [ join(jdk_home, 'lib') ] #, join(jre_home, 'bin', 'server')]
     libraries = ['jvm'] 
 elif platform == 'linux2' or platform == 'linux':
     import subprocess
     # otherwise, we need to search the JDK_HOME
     jdk_home = environ.get('JDK_HOME')
     if not jdk_home:
+<<<<<<< HEAD
+        if platform == 'win32':
+            env_var = environ.get('JAVA_HOME')
+            if env_var and 'jdk' in env_var:
+                jdk_home = env_var
+
+                # Remove /bin if it's appended to JAVA_HOME
+                if jdk_home[-3:] == 'bin':
+                    jdk_home = jdk_home[:-4]
+        else:
+            jdk_home = subprocess.Popen('readlink -f `which javac` | sed "s:bin/javac::"',
+                    shell=True, universal_newlines=True,
+                    stdout=subprocess.PIPE).communicate()[0].strip()
+=======
         dk_home = subprocess.Popen('readlink -f `which javac` | sed "s:bin/javac::"',
                     shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
+>>>>>>> master
     if not jdk_home or not exists(jdk_home):
         raise Exception('Unable to determine JDK_HOME')
 

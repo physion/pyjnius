@@ -2,7 +2,7 @@ __all__ = ('autoclass', 'ensureclass')
 
 from jnius import (
     JavaClass, MetaJavaClass, JavaMethod, JavaStaticMethod,
-    JavaField, JavaStaticField, JavaMultipleMethod, find_javaclass
+    JavaField, JavaStaticField, JavaMultipleMethod, find_javaclass, cast
 )
 
 
@@ -143,7 +143,11 @@ def iterator_wrapper(java_iter_fn):
     def fn(self):
         iterator = java_iter_fn()
         while iterator.hasNext():
-            yield iterator.next()
+            jobj = iterator.next()
+            if hasattr(jobj, '__javaclass__'):
+                yield cast(jobj.__javaclass__, jobj)
+            else:
+                yield jobj
             
     return fn
 
@@ -186,7 +190,10 @@ def autoclass(clsname):
                 ''.join([get_signature(x) for x in method.getParameterTypes()]),
                 get_signature(method.getReturnType()))
             cls = JavaStaticMethod if static else JavaMethod
-            classDict[name] = cls(sig, varargs=varargs)
+            method = cls(sig, varargs=varargs)
+            classDict[name] = method
+            #if name == 'toString' and sig=='()Ljava/lang/String;':
+            #    classDict['__str__'] = method
             if name == 'iterator' and sig == '()Ljava/util/Iterator;':
                 classDict['__iter__'] = iterator_wrapper(classDict[name])
             continue
@@ -227,6 +234,7 @@ def autoclass(clsname):
         classDict[field.getName()] = cls(sig)
 
     classDict['__javaclass__'] = clsname.replace('.', '/')
+
 
     return MetaJavaClass.__new__(
         MetaJavaClass,
