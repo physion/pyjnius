@@ -4,7 +4,6 @@ class_version = 1.6
 javac = javac -source $(class_version) -target $(class_version)
 
 build_ext:
-	JV=1.6
 	$(javac) jnius/src/org/jnius/NativeInvocationHandler.java
 	python setup.py build_ext --inplace -f -g
 
@@ -12,7 +11,6 @@ html:
 	$(MAKE) -C docs html
 
 compile-tests: build_ext
-	JV=1.6
 	cd tests && $(javac) org/jnius/HelloWorld.java
 	cd tests && $(javac) org/jnius/BasicsTest.java
 	cd tests && $(javac) org/jnius/MultipleMethods.java
