@@ -164,6 +164,7 @@ cdef class JavaClass(object):
         cdef jobject j_self = NULL
         cdef jmethodID constructor = NULL
         cdef JNIEnv *j_env = get_jnienv()
+        cdef bytes py_str
 
         # get the constructor definition if exist
         definitions = [('()V', False)]
@@ -213,8 +214,9 @@ cdef class JavaClass(object):
                 populate_args(j_env, d_args, j_args, args_)
 
             # get the java constructor
+            py_str = <bytes>definition.encode('utf-8')
             constructor = j_env[0].GetMethodID(
-                j_env, self.j_cls, b'<init>', <char *><bytes>definition.encode('utf-8'))
+                j_env, self.j_cls, b'<init>', <char *>py_str)
             if constructor == NULL:
                 raise JavaException('Unable to found the constructor'
                         ' for {0}'.format(self.__javaclass__))
@@ -304,16 +306,19 @@ cdef class JavaField(object):
 
     cdef void ensure_field(self) except *:
         cdef JNIEnv *j_env = get_jnienv()
+        cdef bytes py_str
         if self.j_field != NULL:
             return
         if self.is_static:
+            py_str = <bytes>self.definition.encode('utf-8')
             self.j_field = j_env[0].GetStaticFieldID(
                     j_env, self.j_cls, <char *>self.name,
-                    <char *><bytes>self.definition.encode('utf-8'))
+                    <char *>py_str)
         else:
+            py_str = <bytes>self.definition.encode('utf-8')
             self.j_field = j_env[0].GetFieldID(
                     j_env, self.j_cls, <char *>self.name,
-                    <char *><bytes>self.definition.encode('utf-8'))
+                    <char *>py_str)
         if self.j_field == NULL:
             raise JavaException('Unable to found the field {0}'.format(self.name))
 
@@ -502,19 +507,22 @@ cdef class JavaMethod(object):
         self.is_varargs = kwargs.get('varargs', False)
 
     cdef void ensure_method(self) except *:
+        cdef bytes py_str
         if self.j_method != NULL:
             return
         cdef JNIEnv *j_env = get_jnienv()
         if self.name is None:
             raise JavaException('Unable to find a None method!')
         if self.is_static:
+            py_str = <bytes>self.definition.encode('utf-8')
             self.j_method = j_env[0].GetStaticMethodID(
                     j_env, self.j_cls, <char *>self.name,
-                    <char *><bytes>self.definition.encode('utf-8'))
+                    <char *>py_str)
         else:
+            py_str = <bytes>self.definition.encode('utf-8')
             self.j_method = j_env[0].GetMethodID(
                     j_env, self.j_cls, <char *>self.name,
-                    <char *><bytes>self.definition.encode('utf-8'))
+                    <char *>py_str)
 
         if self.j_method == NULL:
             raise JavaException('Unable to find the method'
