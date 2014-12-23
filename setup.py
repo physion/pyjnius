@@ -42,7 +42,7 @@ if platform == 'android':
     libraries = ['sdl', 'log']
     library_dirs = ['libs/' + environ['ARCH']]
 elif platform == 'darwin':
-    
+
     try:
         import objc
         framework = objc.pathForFramework('JavaVM.framework')
@@ -63,7 +63,7 @@ elif platform == 'win32':
     jre_home = environ.get('JRE_HOME')
     include_dirs = [ join(jdk_home, 'include'), join(jdk_home, 'include', platform)]
     library_dirs = [ join(jdk_home, 'lib'), join(jre_home, 'bin', 'server')]
-    libraries = ['jvm'] 
+    libraries = ['jvm']
 elif platform == 'linux2' or platform == 'linux':
     import subprocess
     # otherwise, we need to search the JDK_HOME
@@ -109,6 +109,7 @@ setup(name='pyjnius',
       version=version,
       cmdclass={'build_ext': build_ext},
       packages=['jnius'],
+      py_modules=['jnius_config'],
       url='http://pyjnius.readthedocs.org/',
       author='Mathieu Virbel and Gabriel Pettier, Barry Wark',
       author_email='dev@physion.us',
@@ -125,6 +126,9 @@ setup(name='pyjnius',
               include_dirs=include_dirs,
               extra_link_args=extra_link_args)
           ],
+      package_data={
+          'jnius': [ 'src/org/jnius/*' ]
+      },
       classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
